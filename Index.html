@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Mobile App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Finance ET">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#F2F2F7">
+
+    <title>Finance Hub ET</title>
+    <style>
+        /* Force Light Mode - Overriding system dark mode preferences */
+        :root {
+            --bg: #F2F2F7;
+            --card: #FFFFFF;
+            --text: #1d1d1f;
+            --text-sec: #86868b;
+            --accent: #007AFF;
+            --border: #d2d2d7;
+            --success: #34C759;
+            --danger: #FF3B30;
+            --warning: #FF9500;
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #F2F2F7;
+                --card: #FFFFFF;
+                --text: #1d1d1f;
+                --text-sec: #86868b;
+                --accent: #007AFF;
+                --border: #d2d2d7;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+            overflow-x: hidden;
+            padding-bottom: calc(100px + var(--safe-bottom));
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app-header {
+            position: sticky;
+            top: 0;
+            background: rgba(242, 242, 247, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 20px 20px 10px;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .app-header h1 { font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -0.5px; color: var(--text); }
+        .app-header p { font-size: 11px; color: var(--text-sec); margin: 4px 0 0; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+
+        .content { padding: 16px; max-width: 500px; margin: 0 auto; }
+        .panel { display: none; animation: fadeIn 0.2s ease-out; }
+        .panel.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .card-title { font-size: 11px; font-weight: 700; color: var(--text-sec); text-transform: uppercase; margin-bottom: 16px; display: block; }
+
+        .input-wrapper { margin-bottom: 16px; }
+        .input-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block; color: var(--text); }
+        .input-field { 
+            width: 100%; 
+            background: #F9F9F9; 
+            border: 1px solid var(--border); 
+            border-radius: 10px; 
+            padding: 12px; 
+            font-size: 16px; 
+            color: var(--text); 
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .input-field:focus { border-color: var(--accent); background: #FFF; }
+
+        .segmented-control { display: flex; background: #E5E5EA; padding: 2px; border-radius: 8px; margin-bottom: 16px; }
+        .segmented-control button { flex: 1; border: none; background: transparent; padding: 8px; font-size: 13px; font-weight: 600; color: #48484A; border-radius: 6px; cursor: pointer; }
+        .segmented-control button.active { background: var(--card); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        .summary-value { font-size: 32px; font-weight: 800; margin: 4px 0; color: var(--text); letter-spacing: -1px; }
+        .summary-label { font-size: 13px; color: var(--text-sec); margin-bottom: 16px; }
+
+        .data-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #E5E5EA; font-size: 15px; color: var(--text); }
+        .data-row:last-child { border-bottom: none; }
+        .data-row .val { font-weight: 600; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 8px 10px calc(8px + var(--safe-bottom)); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-sec); text-decoration: none; font-size: 10px; font-weight: 600; width: 33%; }
+        .nav-item.active { color: var(--accent); }
+        .nav-icon { margin-bottom: 4px; width: 22px; height: 22px; }
+
+        .table-container { margin-top: 20px; overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th { background: #F9F9F9; padding: 10px; text-align: right; color: var(--text-sec); border-bottom: 1px solid var(--border); }
+        td { padding: 10px; text-align: right; border-bottom: 1px solid #F2F2F7; color: var(--text); }
+        th:first-child, td:first-child { text-align: left; width: 40px; }
+        .btn-export { width: 100%; background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <p>Finance Assistant</p>
+        <h1 id="view-title">Salary Tax</h1>
+    </header>
+
+    <div class="content">
+        <!-- Salary View -->
+        <div id="salary-view" class="panel active">
+            <div class="card">
+                <span class="card-title">Salary Inputs</span>
+                <div class="input-wrapper">
+                    <label class="input-label">Gross Monthly (ETB)</label>
+                    <input type="number" id="salGross" class="input-field" placeholder="0.00" oninput="calcSalary('gross')">
+                </div>
+                <div class="input-wrapper">
+                    <label class="input-label">Net Take-home (ETB)</label>
+                    <input type="number" id="salNet" class="input-field" placeholder="0.00" oninput="calcSalary('net')">
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="card-title">Analysis</span>
+                <div class="summary-value" id="resNet">0.00</div>
+                <div class="summary-label">Monthly Net (Take-home)</div>
+                
+                <div class="data-row">
+                    <span>Gross Salary</span>
+                    <span class="val" id="resGross">0.00</span>
+                </div>
+                <div class="data-row" style="color: var(--danger)">
+                    <span>Pension 7% (Employee)</span>
+                    <span class="val" id="resPension">0.00</span>
+                </div>
+                <div class="data-row" style="color: var(--danger)">
+                    <span>Income Tax</span>
+                    <span class="val" id="resTax">0.00</span>
+                </div>
+                <div class="data-row">
+                    <span style="color: var(--text-sec)">Pension 11% (Employer)</span>
+                    <span class="val" id="resPensionEmployer">0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- VAT View -->
+        <div id="vat-view" class="panel">
+            <div class="card">
+                <span class="card-title">Transaction Details</span>
+                <div class="segmented-control">
+                    <button id="btnSvc" class="active" onclick="setVatType('service')">Service (>10k)</button>
+                    <button id="btnGds" onclick="setVatType('goods')">Goods (>20k)</button>
+                </div>
+                <div class="input-wrapper">
+                    <label class="input-label">Amount Excluding VAT</label>
+                    <input type="number" id="vatSub" class="input-field" placeholder="0.00" oninput="calcVat('sub')">
+                </div>
+                <div class="input-wrapper">
+                    <label class="input-label">Total Including VAT (15%)</label>
+                    <input type="number" id="vatTotal" class="input-field" placeholder="0.00" oninput="calcVat('total')">
+                </div>
+            </div>
+            <div class="card">
+                <span class="card-title">Payment Summary</span>
+                <div class="summary-value" id="resVatNet">0.00</div>
+                <div class="summary-label">Final Amount to be Received</div>
+                <div class="data-row"><span>VAT (15%)</span><span class="val" id="resVatTax">0.00</span></div>
+                <div class="data-row" id="rowWh"><span>Withholding (3%)</span><span class="val" id="resVatWh">0.00</span></div>
+            </div>
+        </div>
+
+        <!-- Loan View -->
+        <div id="loan-view" class="panel">
+            <div class="card">
+                <span class="card-title">Loan Details</span>
+                <div class="input-wrapper">
+                    <label class="input-label">Total Amount</label>
+                    <input type="number" id="lAmt" class="input-field" placeholder="e.g. 500000" oninput="calcLoan()">
+                </div>
+                <div class="input-wrapper">
+                    <label class="input-label">Interest Rate (%)</label>
+                    <input type="number" id="lRate" class="input-field" placeholder="e.g. 15" oninput="calcLoan()">
+                </div>
+                <div class="input-wrapper">
+                    <label class="input-label">Term (Years)</label>
+                    <input type="number" id="lYrs" class="input-field" placeholder="e.g. 5" oninput="calcLoan()">
+                </div>
+                <div class="segmented-control">
+                    <button id="btnLMo" class="active" onclick="setLoanFreq(12)">Monthly</button>
+                    <button id="btnLQt" onclick="setLoanFreq(4)">Quarterly</button>
+                </div>
+            </div>
+            <div class="card">
+                <span class="card-title">Payment Overview</span>
+                <div class="summary-value" id="resLPmt">0.00</div>
+                <div class="summary-label" id="labelPmt">Monthly Payment</div>
+                <div class="data-row"><span>Total Interest Paid</span><span class="val" style="color:var(--danger)" id="resLInt">0.00</span></div>
+            </div>
+            <button class="btn-export" onclick="exportLoanCSV()">Download Schedule (CSV)</button>
+            <div class="card">
+                <span class="card-title">Amortization Schedule</span>
+                <div class="table-container" id="lTable"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="switchView('salary', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            Salary
+        </a>
+        <a href="#" class="nav-item" onclick="switchView('vat', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16M4 14h16M9 18l3 3 3-3M9 6l3-3 3 3"></path></svg>
+            VAT
+        </a>
+        <a href="#" class="nav-item" onclick="switchView('loan', this)">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Loans
+        </a>
+    </nav>
+
+    <script>
+        let vatType = 'service';
+        let loanFreq = 12;
+        let loanData = [];
+
+        const brackets = [
+            { min: 0, max: 2000, rate: 0.00, ded: 0 },
+            { min: 2000, max: 4000, rate: 0.15, ded: 300 },
+            { min: 4000, max: 7000, rate: 0.20, ded: 500 },
+            { min: 7000, max: 10000, rate: 0.25, ded: 850 },
+            { min: 10000, max: 14000, rate: 0.30, ded: 1350 },
+            { min: 14000, max: Infinity, rate: 0.35, ded: 2050 }
+        ];
+
+        function format(v) {
+            return Number(v).toLocaleString('en-ET', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function switchView(view, el) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById(view + '-view').classList.add('active');
+            document.getElementById('view-title').innerText = { salary: 'Salary Tax', vat: 'VAT & WH', loan: 'Loan Calculator' }[view];
+            if(view === 'loan') calcLoan();
+            window.scrollTo(0,0);
+        }
+
+        function calcSalary(type) {
+            let gross = 0;
+            if (type === 'gross') {
+                gross = parseFloat(document.getElementById('salGross').value) || 0;
+            } else {
+                let net = parseFloat(document.getElementById('salNet').value) || 0;
+                gross = reverseSalary(net);
+                document.getElementById('salGross').value = gross ? gross.toFixed(2) : '';
+            }
+
+            const pension = gross * 0.07;
+            const pensionEmployer = gross * 0.11;
+            
+            let tax = 0;
+            for (let b of brackets) {
+                if (gross > b.min) {
+                    tax = (gross * b.rate) - b.ded;
+                }
+            }
+            tax = Math.max(0, tax);
+
+            const net = gross - pension - tax;
+
+            document.getElementById('resNet').innerText = format(net);
+            document.getElementById('resGross').innerText = format(gross);
+            document.getElementById('resPension').innerText = '- ' + format(pension);
+            document.getElementById('resTax').innerText = '- ' + format(tax);
+            document.getElementById('resPensionEmployer').innerText = format(pensionEmployer);
+
+            if(type === 'gross') document.getElementById('salNet').value = net ? net.toFixed(2) : '';
+        }
+
+        function reverseSalary(net) {
+            let rate, ded;
+            if (net <= 1860) { rate = 0.00; ded = 0; }
+            else if (net <= 3420) { rate = 0.15; ded = 300; }
+            else if (net <= 5610) { rate = 0.20; ded = 500; }
+            else if (net <= 7650) { rate = 0.25; ded = 850; }
+            else if (net <= 10170) { rate = 0.30; ded = 1350; }
+            else { rate = 0.35; ded = 2050; }
+
+            return (net - ded) / (0.93 - rate);
+        }
+
+        function setVatType(t) { vatType = t; document.getElementById('btnSvc').className = t === 'service' ? 'active' : ''; document.getElementById('btnGds').className = t === 'goods' ? 'active' : ''; calcVat('sub'); }
+        function calcVat(source) {
+            const sIn = document.getElementById('vatSub');
+            const tIn = document.getElementById('vatTotal');
+            let sub = source === 'sub' ? (parseFloat(sIn.value) || 0) : (parseFloat(tIn.value) || 0) / 1.15;
+            const vat = sub * 0.15;
+            const whApply = (vatType === 'service' && sub >= 10000) || (vatType === 'goods' && sub >= 20000);
+            const whVal = whApply ? sub * 0.03 : 0; 
+            const net = (sub + vat) - whVal;
+            if(source !== 'sub') sIn.value = sub ? sub.toFixed(2) : '';
+            if(source !== 'total') tIn.value = (sub + vat) ? (sub + vat).toFixed(2) : '';
+            document.getElementById('resVatNet').innerText = format(net);
+            document.getElementById('resVatTax').innerText = '+ ' + format(vat);
+            document.getElementById('resVatWh').innerText = whVal ? '- ' + format(whVal) : '0.00';
+            document.getElementById('rowWh').style.color = whApply ? 'var(--danger)' : 'var(--text-sec)';
+        }
+
+        function setLoanFreq(f) { loanFreq = f; document.getElementById('btnLMo').className = f === 12 ? 'active' : ''; document.getElementById('btnLQt').className = f === 4 ? 'active' : ''; document.getElementById('labelPmt').innerText = f === 12 ? 'Monthly Payment' : 'Quarterly Payment'; calcLoan(); }
+        function calcLoan() {
+            const p = parseFloat(document.getElementById('lAmt').value) || 0;
+            const r = (parseFloat(document.getElementById('lRate').value) || 0) / 100;
+            const y = parseFloat(document.getElementById('lYrs').value) || 0;
+            
+            // Clear outputs if inputs are insufficient
+            if(!p || !r || !y) {
+                document.getElementById('resLPmt').innerText = "0.00";
+                document.getElementById('resLInt').innerText = "0.00";
+                document.getElementById('lTable').innerHTML = "";
+                loanData = [];
+                return;
+            }
+
+            const n = y * loanFreq, i = r / loanFreq;
+            const pmt = p * (i * Math.pow(1+i, n)) / (Math.pow(1+i, n) - 1);
+            let balance = p, tInt = 0; loanData = [];
+            let tableHtml = '<table><thead><tr><th>#</th><th>Paymt</th><th>Prin.</th><th>Int.</th><th>Bal.</th></tr></thead><tbody>';
+            
+            for(let j=1; j<=n; j++) {
+                let interest = balance * i, principal = pmt - interest;
+                balance -= principal; tInt += interest;
+                loanData.push({p:j, pmt, prin: principal, int: interest, bal: Math.max(0, balance)});
+                tableHtml += `<tr><td>${j}</td><td>${pmt.toFixed(0)}</td><td>${principal.toFixed(0)}</td><td>${interest.toFixed(0)}</td><td>${Math.max(0, balance).toFixed(0)}</td></tr>`;
+            }
+            
+            tableHtml += '</tbody></table>';
+            document.getElementById('lTable').innerHTML = tableHtml;
+            document.getElementById('resLPmt').innerText = format(pmt);
+            document.getElementById('resLInt').innerText = format(tInt);
+        }
+
+        function exportLoanCSV() {
+            if(!loanData.length) return;
+            let csv = "Period,Payment,Principal,Interest,Balance\n";
+            loanData.forEach(r => csv += `${r.p},${r.pmt.toFixed(2)},${r.prin.toFixed(2)},${r.int.toFixed(2)},${r.bal.toFixed(2)}\n`);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'repayment_schedule.csv'; a.click();
+        }
+
+        window.onload = () => { 
+            // Don't auto-calculate salary on load to keep inputs clean if preferred
+            // but we'll leave it for VAT/Salary as examples, and specifically 
+            // empty for Loans as requested.
+            calcSalary('gross'); 
+            calcVat('sub'); 
+        };
+    </script>
+</body>
+</html>
