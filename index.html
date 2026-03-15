@@ -131,34 +131,38 @@
                 <span class="card-title">Salary Inputs</span>
                 <div class="input-wrapper">
                     <label class="input-label">Gross Monthly (ETB)</label>
-                    <input type="number" id="salGross" class="input-field" placeholder="0.00" oninput="calcSalary('gross')">
+                    <input type="number" id="salGross" class="input-field" placeholder="0.00" min="0" step="0.01" oninput="calcSalary('gross')">
                 </div>
                 <div class="input-wrapper">
                     <label class="input-label">Net Take-home (ETB)</label>
-                    <input type="number" id="salNet" class="input-field" placeholder="0.00" oninput="calcSalary('net')">
+                    <input type="number" id="salNet" class="input-field" placeholder="0.00" min="0" step="0.01" oninput="calcSalary('net')">
                 </div>
             </div>
 
             <div class="card">
                 <span class="card-title">Analysis</span>
-                <div class="summary-value" id="resNet">0.00</div>
+                <div class="summary-value" id="resNet">0.00 ETB</div>
                 <div class="summary-label">Monthly Net (Take-home)</div>
                 
                 <div class="data-row">
                     <span>Gross Salary</span>
-                    <span class="val" id="resGross">0.00</span>
+                    <span class="val" id="resGross">0.00 ETB</span>
                 </div>
                 <div class="data-row" style="color: var(--danger)">
                     <span>Pension 7% (Employee)</span>
-                    <span class="val" id="resPension">0.00</span>
+                    <span class="val" id="resPension">- 0.00 ETB</span>
                 </div>
                 <div class="data-row" style="color: var(--danger)">
                     <span>Income Tax</span>
-                    <span class="val" id="resTax">0.00</span>
+                    <span class="val" id="resTax">- 0.00 ETB</span>
                 </div>
                 <div class="data-row">
                     <span style="color: var(--text-sec)">Pension 11% (Employer)</span>
-                    <span class="val" id="resPensionEmployer">0.00</span>
+                    <span class="val" id="resPensionEmployer">0.00 ETB</span>
+                </div>
+                <div class="data-row">
+                    <span>Effective Tax Rate</span>
+                    <span class="val" id="resEffective">0.0%</span>
                 </div>
             </div>
         </div>
@@ -168,24 +172,24 @@
             <div class="card">
                 <span class="card-title">Transaction Details</span>
                 <div class="segmented-control">
-                    <button id="btnSvc" class="active" onclick="setVatType('service')">Service (>10k)</button>
-                    <button id="btnGds" onclick="setVatType('goods')">Goods (>20k)</button>
+                    <button id="btnSvc" class="active" onclick="setVatType('service')">Service (&gt;10k)</button>
+                    <button id="btnGds" onclick="setVatType('goods')">Goods (&gt;20k)</button>
                 </div>
                 <div class="input-wrapper">
-                    <label class="input-label">Amount Excluding VAT</label>
-                    <input type="number" id="vatSub" class="input-field" placeholder="0.00" oninput="calcVat('sub')">
+                    <label class="input-label">Amount Excluding VAT (ETB)</label>
+                    <input type="number" id="vatSub" class="input-field" placeholder="0.00" min="0" step="0.01" oninput="calcVat('sub')">
                 </div>
                 <div class="input-wrapper">
-                    <label class="input-label">Total Including VAT (15%)</label>
-                    <input type="number" id="vatTotal" class="input-field" placeholder="0.00" oninput="calcVat('total')">
+                    <label class="input-label">Total Including VAT (15%) (ETB)</label>
+                    <input type="number" id="vatTotal" class="input-field" placeholder="0.00" min="0" step="0.01" oninput="calcVat('total')">
                 </div>
             </div>
             <div class="card">
                 <span class="card-title">Payment Summary</span>
-                <div class="summary-value" id="resVatNet">0.00</div>
+                <div class="summary-value" id="resVatNet">0.00 ETB</div>
                 <div class="summary-label">Final Amount to be Received</div>
-                <div class="data-row"><span>VAT (15%)</span><span class="val" id="resVatTax">0.00</span></div>
-                <div class="data-row" id="rowWh"><span>Withholding (3%)</span><span class="val" id="resVatWh">0.00</span></div>
+                <div class="data-row"><span>VAT (15%)</span><span class="val" id="resVatTax">+ 0.00 ETB</span></div>
+                <div class="data-row" id="rowWh"><span>Withholding (3%)</span><span class="val" id="resVatWh">0.00 ETB</span></div>
             </div>
         </div>
 
@@ -194,16 +198,16 @@
             <div class="card">
                 <span class="card-title">Loan Details</span>
                 <div class="input-wrapper">
-                    <label class="input-label">Total Amount</label>
-                    <input type="number" id="lAmt" class="input-field" placeholder="e.g. 500000" oninput="calcLoan()">
+                    <label class="input-label">Total Amount (ETB)</label>
+                    <input type="number" id="lAmt" class="input-field" placeholder="e.g. 500000" min="0" step="0.01" oninput="calcLoan()">
                 </div>
                 <div class="input-wrapper">
                     <label class="input-label">Interest Rate (%)</label>
-                    <input type="number" id="lRate" class="input-field" placeholder="e.g. 15" oninput="calcLoan()">
+                    <input type="number" id="lRate" class="input-field" placeholder="e.g. 15" min="0" step="0.01" oninput="calcLoan()">
                 </div>
                 <div class="input-wrapper">
                     <label class="input-label">Term (Years)</label>
-                    <input type="number" id="lYrs" class="input-field" placeholder="e.g. 5" oninput="calcLoan()">
+                    <input type="number" id="lYrs" class="input-field" placeholder="e.g. 5" min="0" step="0.01" oninput="calcLoan()">
                 </div>
                 <div class="segmented-control">
                     <button id="btnLMo" class="active" onclick="setLoanFreq(12)">Monthly</button>
@@ -212,9 +216,9 @@
             </div>
             <div class="card">
                 <span class="card-title">Payment Overview</span>
-                <div class="summary-value" id="resLPmt">0.00</div>
+                <div class="summary-value" id="resLPmt">0.00 ETB</div>
                 <div class="summary-label" id="labelPmt">Monthly Payment</div>
-                <div class="data-row"><span>Total Interest Paid</span><span class="val" style="color:var(--danger)" id="resLInt">0.00</span></div>
+                <div class="data-row"><span>Total Interest Paid</span><span class="val" style="color:var(--danger)" id="resLInt">0.00 ETB</span></div>
             </div>
             <button class="btn-export" onclick="exportLoanCSV()">Download Schedule (CSV)</button>
             <div class="card">
@@ -255,7 +259,10 @@
         ];
 
         function format(v) {
-            return Number(v).toLocaleString('en-ET', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return Number(v).toLocaleString('en-ET', { 
+                minimumFractionDigits: 2, 
+                maximumFractionDigits: 2 
+            }) + ' ETB';
         }
 
         function switchView(view, el) {
@@ -290,12 +297,14 @@
             tax = Math.max(0, tax);
 
             const net = gross - pension - tax;
+            const effectiveRate = gross > 0 ? ((tax / gross) * 100).toFixed(1) : '0.0';
 
             document.getElementById('resNet').innerText = format(net);
             document.getElementById('resGross').innerText = format(gross);
             document.getElementById('resPension').innerText = '- ' + format(pension);
             document.getElementById('resTax').innerText = '- ' + format(tax);
             document.getElementById('resPensionEmployer').innerText = format(pensionEmployer);
+            document.getElementById('resEffective').innerText = effectiveRate + '%';
 
             if(type === 'gross') document.getElementById('salNet').value = net ? net.toFixed(2) : '';
         }
@@ -312,7 +321,13 @@
             return (net - ded) / (0.93 - rate);
         }
 
-        function setVatType(t) { vatType = t; document.getElementById('btnSvc').className = t === 'service' ? 'active' : ''; document.getElementById('btnGds').className = t === 'goods' ? 'active' : ''; calcVat('sub'); }
+        function setVatType(t) {
+            vatType = t;
+            document.getElementById('btnSvc').classList.toggle('active', t === 'service');
+            document.getElementById('btnGds').classList.toggle('active', t === 'goods');
+            calcVat('sub');
+        }
+
         function calcVat(source) {
             const sIn = document.getElementById('vatSub');
             const tIn = document.getElementById('vatTotal');
@@ -321,15 +336,24 @@
             const whApply = (vatType === 'service' && sub >= 10000) || (vatType === 'goods' && sub >= 20000);
             const whVal = whApply ? sub * 0.03 : 0; 
             const net = (sub + vat) - whVal;
+            
             if(source !== 'sub') sIn.value = sub ? sub.toFixed(2) : '';
             if(source !== 'total') tIn.value = (sub + vat) ? (sub + vat).toFixed(2) : '';
+            
             document.getElementById('resVatNet').innerText = format(net);
             document.getElementById('resVatTax').innerText = '+ ' + format(vat);
-            document.getElementById('resVatWh').innerText = whVal ? '- ' + format(whVal) : '0.00';
+            document.getElementById('resVatWh').innerText = whVal ? '- ' + format(whVal) : format(0);
             document.getElementById('rowWh').style.color = whApply ? 'var(--danger)' : 'var(--text-sec)';
         }
 
-        function setLoanFreq(f) { loanFreq = f; document.getElementById('btnLMo').className = f === 12 ? 'active' : ''; document.getElementById('btnLQt').className = f === 4 ? 'active' : ''; document.getElementById('labelPmt').innerText = f === 12 ? 'Monthly Payment' : 'Quarterly Payment'; calcLoan(); }
+        function setLoanFreq(f) {
+            loanFreq = f;
+            document.getElementById('btnLMo').classList.toggle('active', f === 12);
+            document.getElementById('btnLQt').classList.toggle('active', f === 4);
+            document.getElementById('labelPmt').innerText = f === 12 ? 'Monthly Payment' : 'Quarterly Payment';
+            calcLoan();
+        }
+
         function calcLoan() {
             const p = parseFloat(document.getElementById('lAmt').value) || 0;
             const r = (parseFloat(document.getElementById('lRate').value) || 0) / 100;
@@ -337,8 +361,8 @@
             
             // Clear outputs if inputs are insufficient
             if(!p || !r || !y) {
-                document.getElementById('resLPmt').innerText = "0.00";
-                document.getElementById('resLInt').innerText = "0.00";
+                document.getElementById('resLPmt').innerText = "0.00 ETB";
+                document.getElementById('resLInt').innerText = "0.00 ETB";
                 document.getElementById('lTable').innerHTML = "";
                 loanData = [];
                 return;
@@ -346,14 +370,27 @@
 
             const n = y * loanFreq, i = r / loanFreq;
             const pmt = p * (i * Math.pow(1+i, n)) / (Math.pow(1+i, n) - 1);
-            let balance = p, tInt = 0; loanData = [];
+            let balance = p, tInt = 0; 
+            loanData = [];
+            
             let tableHtml = '<table><thead><tr><th>#</th><th>Paymt</th><th>Prin.</th><th>Int.</th><th>Bal.</th></tr></thead><tbody>';
             
             for(let j=1; j<=n; j++) {
-                let interest = balance * i, principal = pmt - interest;
-                balance -= principal; tInt += interest;
-                loanData.push({p:j, pmt, prin: principal, int: interest, bal: Math.max(0, balance)});
-                tableHtml += `<tr><td>${j}</td><td>${pmt.toFixed(0)}</td><td>${principal.toFixed(0)}</td><td>${interest.toFixed(0)}</td><td>${Math.max(0, balance).toFixed(0)}</td></tr>`;
+                let interest = balance * i;
+                let principal = pmt - interest;
+                balance -= principal;
+                tInt += interest;
+                const currentBal = Math.max(0, balance);
+                
+                loanData.push({p:j, pmt, prin: principal, int: interest, bal: currentBal});
+                
+                tableHtml += `<tr>
+                    <td>${j}</td>
+                    <td>${pmt.toFixed(2)}</td>
+                    <td>${principal.toFixed(2)}</td>
+                    <td>${interest.toFixed(2)}</td>
+                    <td>${currentBal.toFixed(2)}</td>
+                </tr>`;
             }
             
             tableHtml += '</tbody></table>';
@@ -365,16 +402,19 @@
         function exportLoanCSV() {
             if(!loanData.length) return;
             let csv = "Period,Payment,Principal,Interest,Balance\n";
-            loanData.forEach(r => csv += `${r.p},${r.pmt.toFixed(2)},${r.prin.toFixed(2)},${r.int.toFixed(2)},${r.bal.toFixed(2)}\n`);
+            loanData.forEach(r => {
+                csv += `${r.p},${r.pmt.toFixed(2)},${r.prin.toFixed(2)},${r.int.toFixed(2)},${r.bal.toFixed(2)}\n`;
+            });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'repayment_schedule.csv'; a.click();
+            const a = document.createElement('a'); 
+            a.href = url; 
+            a.download = 'repayment_schedule.csv'; 
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
 
         window.onload = () => { 
-            // Don't auto-calculate salary on load to keep inputs clean if preferred
-            // but we'll leave it for VAT/Salary as examples, and specifically 
-            // empty for Loans as requested.
             calcSalary('gross'); 
             calcVat('sub'); 
         };
